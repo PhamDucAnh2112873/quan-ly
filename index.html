@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Đăng Ký</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 100%;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+        }
+        .option-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .option-container button {
+            width: 80%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .option-container button:hover {
+            background-color: #0056b3;
+        }
+        .form-container {
+            display: none;
+            margin-top: 20px;
+        }
+        select, input[type="text"], button {
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .time-selector {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .time-selector select {
+            flex: 1;
+            text-align: center;
+            font-size: 16px;
+        }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .schedule-table th, .schedule-table td {
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 10px;
+        }
+        .schedule-table th {
+            background-color: #007BFF;
+            color: white;
+        }
+        .schedule-table input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quản Lý Đăng Ký</h1>
+        <div class="option-container">
+            <button id="registerAreaBtn">Đăng Ký Khu Vực</button>
+            <button id="registerScheduleBtn">Đăng Ký Lịch Làm Việc</button>
+        </div>
+
+        <!-- Đăng ký khu vực -->
+        <div class="form-container" id="registerAreaForm">
+            <form id="areaForm">
+                <div class="form-group">
+                    <label for="workArea">Chọn Khu Vực Làm Việc</label>
+                    <select id="workArea" required>
+                        <option value="">-- Chọn khu vực --</option>
+                        <option value="DNA">Khu DNA</option>
+                        <option value="RNA">Khu RNA</option>
+                        <option value="ELISA">Khu ELISA</option>
+                        <option value="Vi sinh">Vi sinh</option>
+                        <option value="Hậu PCR">Hậu PCR</option>
+                        <option value="Protein">Protein</option>
+                        <option value="Box PCR">Box PCR</option>
+                        <option value="308">308 (Điện di + Thanh trùng)</option>
+                        <option value="Box Vi sinh 305">Box Vi sinh 305</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="areaUserName">Tên Người Đăng Ký</label>
+                    <input type="text" id="areaUserName" placeholder="Nhập tên của bạn" required>
+                </div>
+                <div class="form-group">
+                    <label for="startTime">Thời Gian Bắt Đầu</label>
+                    <div class="time-selector">
+                        <select id="startHour"></select>
+                        <select id="startMinute"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="endTime">Thời Gian Kết Thúc</label>
+                    <div class="time-selector">
+                        <select id="endHour"></select>
+                        <select id="endMinute"></select>
+                    </div>
+                </div>
+                <button type="button" onclick="submitAreaForm()">Đăng Ký</button>
+            </form>
+        </div>
+
+        <!-- Đăng ký lịch làm việc -->
+        <div class="form-container" id="registerScheduleForm">
+            <form id="scheduleForm">
+                <div class="form-group">
+                    <label for="scheduleUserName">Tên Người Đăng Ký</label>
+                    <input type="text" id="scheduleUserName" placeholder="Nhập tên của bạn" required>
+                </div>
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Sáng (8:00 - 12:00)</th>
+                            <th>Chiều (13:00 - 17:00)</th>
+                            <th>Tối (17:00 - 21:00)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Thứ 2</td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 2_Sáng"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 2_Chiều"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 2_Tối"></td>
+                        </tr>
+                        <tr>
+                            <td>Thứ 3</td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 3_Sáng"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 3_Chiều"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 3_Tối"></td>
+                        </tr>
+                        <tr>
+                            <td>Thứ 4</td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 4_Sáng"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 4_Chiều"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 4_Tối"></td>
+                        </tr>
+                        <tr>
+                            <td>Thứ 5</td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 5_Sáng"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 5_Chiều"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 5_Tối"></td>
+                        </tr>
+                        <tr>
+                            <td>Thứ 6</td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 6_Sáng"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 6_Chiều"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 6_Tối"></td>
+                        </tr>
+                        <tr>
+                            <td>Thứ 7</td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 7_Sáng"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 7_Chiều"></td>
+                            <td><input type="checkbox" name="schedule" value="Thứ 7_Tối"></td>
+                        </tr>
+                        <tr>
+                            <td>Chủ Nhật</td>
+                            <td><input type="checkbox" name="schedule" value="Chủ Nhật_Sáng"></td>
+                            <td><input type="checkbox" name="schedule" value="Chủ Nhật_Chiều"></td>
+                            <td><input type="checkbox" name="schedule" value="Chủ Nhật_Tối"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="button" onclick="submitScheduleForm()">Đăng Ký</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const registerAreaBtn = document.getElementById('registerAreaBtn');
+        const registerScheduleBtn = document.getElementById('registerScheduleBtn');
+        const registerAreaForm = document.getElementById('registerAreaForm');
+        const registerScheduleForm = document.getElementById('registerScheduleForm');
+
+        registerAreaBtn.addEventListener('click', () => {
+            registerAreaForm.style.display = 'block';
+            registerScheduleForm.style.display = 'none';
+        });
+
+        registerScheduleBtn.addEventListener('click', () => {
+            registerAreaForm.style.display = 'none';
+            registerScheduleForm.style.display = 'block';
+        });
+
+        function populateTimeSelectors() {
+            const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
+            const minutes = Array.from({ length: 6 }, (_, i) => (i * 10).toString().padStart(2, '0'));
+
+            const startHour = document.getElementById('startHour');
+            const startMinute = document.getElementById('startMinute');
+            const endHour = document.getElementById('endHour');
+            const endMinute = document.getElementById('endMinute');
+
+            hours.forEach(hour => {
+                const option = document.createElement('option');
+                option.value = hour;
+                option.textContent = hour;
+                startHour.appendChild(option.cloneNode(true));
+                endHour.appendChild(option.cloneNode(true));
+            });
+
+            minutes.forEach(minute => {
+                const option = document.createElement('option');
+                option.value = minute;
+                option.textContent = minute;
+                startMinute.appendChild(option.cloneNode(true));
+                endMinute.appendChild(option.cloneNode(true));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', populateTimeSelectors);
+
+        function submitAreaForm() {
+            const workArea = document.getElementById('workArea').value;
+            const areaUserName = document.getElementById('areaUserName').value;
+            const startHour = document.getElementById('startHour').value;
+            const startMinute = document.getElementById('startMinute').value;
+            const endHour = document.getElementById('endHour').value;
+            const endMinute = document.getElementById('endMinute').value;
+
+            const startTime = `${startHour}:${startMinute}`;
+            const endTime = `${endHour}:${endMinute}`;
+
+            if (workArea && areaUserName && startHour && startMinute && endHour && endMinute) {
+                const scriptURL = "https://script.google.com/macros/s/AKfycbxSNqcQ3J2beY7dcfV6I1E8RQkt_ZpnUK_8lFOTeYD-dn9k_t6IQReKmFjwbdcRmApQ/exec";
+
+                fetch(scriptURL, {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        action: 'registerArea',
+                        workArea: workArea,
+                        userName: areaUserName,
+                        startTime: startTime,
+                        endTime: endTime
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        alert("Đăng ký khu vực thành công!");
+                        document.getElementById('areaForm').reset();
+                    } else {
+                        alert("Đã xảy ra lỗi. Vui lòng thử lại!");
+                    }
+                })
+                .catch(error => alert("Không thể gửi dữ liệu. Vui lòng kiểm tra lại!"));
+            } else {
+                alert('Vui lòng điền đầy đủ thông tin!');
+            }
+        }
+
+        function submitScheduleForm() {
+            const scheduleUserName = document.getElementById('scheduleUserName').value;
+            const scheduleSelections = Array.from(document.querySelectorAll('input[name="schedule"]:checked')).map(selection => selection.value);
+
+            if (scheduleUserName && scheduleSelections.length > 0) {
+                const scriptURL = "https://script.google.com/macros/s/AKfycbxSNqcQ3J2beY7dcfV6I1E8RQkt_ZpnUK_8lFOTeYD-dn9k_t6IQReKmFjwbdcRmApQ/exec";
+
+                fetch(scriptURL, {
+                    method: 'POST',
+                    body: new URLSearchParams({
+                        action: 'registerSchedule',
+                        userName: scheduleUserName,
+                        schedules: scheduleSelections.join(", ")
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        alert("Đăng ký lịch làm việc thành công!");
+                        document.getElementById('scheduleForm').reset();
+                    } else {
+                        alert("Đã xảy ra lỗi. Vui lòng thử lại!");
+                    }
+                })
+                .catch(error => alert("Không thể gửi dữ liệu. Vui lòng kiểm tra lại!"));
+            } else {
+                alert('Vui lòng nhập tên và chọn ít nhất một lịch làm việc!');
+            }
+        }
+    </script>
+</body>
+</html>
